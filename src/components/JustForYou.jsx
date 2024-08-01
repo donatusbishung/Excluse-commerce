@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../features/cartSlice";
 import { addToWishlist } from "../features/wishlistSlice";
 
-function BestSellingLayout() {
+function JustForYou() {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const wishlist = useSelector((state) => state.wishlist);
@@ -62,19 +62,6 @@ function BestSellingLayout() {
     }))
   );
 
-  const handleHeartClick = (item, index) => {
-    if (wishlist.items.some((e) => e.id === item.id)) {
-      return;
-    }
-
-    setCards(
-      cards.map((card, i) =>
-        i === index ? { ...card, isHeartClicked: true } : card
-      )
-    );
-    handleAddToWishlist(item);
-  };
-
   const handleEyeClick = (index) => {
     setCards(
       cards.map((card, i) =>
@@ -84,20 +71,19 @@ function BestSellingLayout() {
   };
 
   return (
-    <div className="px-[10px] lg:px-[100px] flex flex-col gap-5">
-      <div className="flex items-center gap-3">
-        <img src={block} alt="block" />
-        <p className="font-Poppins font-[600] text-[16px] leading-[20px] text-[#DB4444]">
-          This Month
-        </p>
-      </div>
-      <div className="flex justify-between items-center">
-        <h1 className="font-Inter font-[600] text-[20px] lg:text-[36px] leading-[48px]">
-          Best Selling Products
-        </h1>
-        <button className="bg-[#DB4444] hidden lg:block rounded-[4px] lg:mb-7 px-[48px] py-[16px] font-Poppins text-[16px] leading-6 text-[#FAFAFA] hover:bg-[#e98b8b]">
-          View All
-        </button>
+    <div className=" flex flex-col gap-10 mb-10">
+      <div className="flex items-center gap-3 justify-between mt-9">
+        <div className="flex items-center gap-3">
+          <img src={block} alt="block" />
+          <p className="font-Poppins font-[600] text-[16px] leading-[20px] text-[#DB4444]">
+            Just For You
+          </p>
+        </div>
+        <div className="flex justify-between items-center">
+          <button className="border border-slate-800 hidden lg:block rounded-[4px] lg:mb-7 px-[48px] py-[16px] font-Poppins text-[16px] leading-6 text-[#000000]">
+            See All
+          </button>
+        </div>
       </div>
       <div className="grid mx-auto gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {cards.map((card, i) => (
@@ -111,19 +97,6 @@ function BestSellingLayout() {
                 className="w-[190px] h-[180px]"
               />
               <div className="absolute flex flex-col gap-3 p-2 left-[210px] -top-[0.4px]">
-                <div
-                  className={`rounded-full p-2 cursor-pointer ${
-                    card.isHeartClicked
-                      ? "bg-[#DB4444] text-white"
-                      : "bg-white text-[#000000]"
-                  }`}
-                  onClick={() => handleHeartClick(card, i)}>
-                  <IoIosHeartEmpty
-                    className={`w-[24px] h-[24px] duration-200 ${
-                      card.isHeartClicked ? "text-white" : "text-[#000000]"
-                    }`}
-                  />
-                </div>
                 <div
                   className={`rounded-full p-2 cursor-pointer duration-200 ${
                     card.isEyeClicked
@@ -164,11 +137,8 @@ function BestSellingLayout() {
           </div>
         ))}
       </div>
-      <button className="bg-[#DB4444] mx-auto mt-4 block lg:hidden rounded-[4px] lg:mb-7 px-[48px] py-[16px] font-Poppins text-[16px] leading-6 text-[#FAFAFA] duration-200 hover:bg-[#7e2626] hover:text-[#fffbfb]">
-        View All
-      </button>
     </div>
   );
 }
 
-export default BestSellingLayout;
+export default JustForYou;

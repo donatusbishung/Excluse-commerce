@@ -1,5 +1,4 @@
 import GeneralHeader from "../components/GeneralHeader";
-import TopHeader from "../components/TopHeader";
 import Footer from "../components/Footer";
 import About_layout1 from "../components/About-layouts/About_layout1";
 import About_layout2 from "../components/About-layouts/About_layout2";
@@ -10,10 +9,9 @@ function About() {
   return (
     <div className="flex flex-col justify-between gap-9 lg:gap-20">
       <div>
-        <TopHeader />
         <GeneralHeader />
       </div>
-      <div className="pl-[10px] lg:px-[100px]">
+      <div className="pl-[10px] pt-[120px] lg:px-[100px]">
         <nav>
           <ul className="flex gap-[10px] font-Poppins text-[14px] leading-[20px] font-[400]">
             <li>

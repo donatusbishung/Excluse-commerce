@@ -42,10 +42,10 @@ function CategoriesHero() {
     },
   ];
   return (
-    <div className="w-[217px] border-r border-slate-400 mr-5 hidden lg:block">
+    <div className="w-[217px] mr-5 hidden lg:block">
       {items.map((item, i) => (
         <ul key={i}>
-          <li className="flex justify-between items-center gap-2 mb-5 cursor-pointer font-Poppins font-[400] text-[16px] leading-[24px] duration-200 hover:text-[#DB4444]">
+          <li className="flex justify-between items-center gap-2 mb-6 cursor-pointer font-Poppins font-[400] text-[16px] leading-[24px] duration-200 hover:text-[#DB4444]">
             {item.title}{" "}
             <span>
               {item.dropDown && (

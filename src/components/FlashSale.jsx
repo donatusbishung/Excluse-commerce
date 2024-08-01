@@ -1,20 +1,20 @@
+import { products } from "../Utils/db";
+import { useEffect, useState } from "react";
+import block from "../assets/images/Rectangle-block.png";
 import arrowRight from "../assets/images/Arrow-right.png";
 import arrowLeft from "../assets/images/arrow-left.png";
-import block from "../assets/images/Rectangle-block.png";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { PiEyeLight } from "react-icons/pi";
-import { useEffect, useState } from "react";
-import { products } from "../Utils/db";
+import CountDown from "./Timer/CountDown";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../features/cartSlice";
-import { addToWishlist, removeFromWishlist } from "../features/wishlistSlice";
+import { addToWishlist } from "../features/wishlistSlice";
 
-function ExploreProducts() {
+function FlashSale() {
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const wishlist = useSelector((state) => state.wishlist);
-  const dispatch = useDispatch();
-  const [clickedCart, setClickedCart] = useState(false);
-  const [clickedWishlist, setClickedWishlist] = useState(false);
+  const [clicked, setClicked] = useState(false);
 
   const handleAddToCart = (item) => {
     if (cart.items.some((e) => e.id === item.id)) {
@@ -23,31 +23,26 @@ function ExploreProducts() {
     }
 
     dispatch(addToCart(item));
-    setClickedCart(true);
+    setClicked(true);
   };
 
-  const handleWishlistToggle = (item) => {
-    if (wishlist.items.some((e) => e.id === item.id)) {
-      dispatch(removeFromWishlist(item));
-    } else {
-      dispatch(addToWishlist(item));
-    }
-    setClickedWishlist(true);
-  };
-
+  // useEffect to save cart items
   useEffect(() => {
-    if (clickedCart) {
+    if (clicked) {
       localStorage.setItem("cart", JSON.stringify(cart.items));
-      setClickedCart(false);
     }
-  }, [clickedCart, cart]);
+    setClicked(false);
+  }, [clicked, cart]);
 
-  useEffect(() => {
-    if (clickedWishlist) {
-      localStorage.setItem("wishlist", JSON.stringify(wishlist.items));
-      setClickedWishlist(false);
+  const handleAddToWishlist = (item) => {
+    if (wishlist.items.some((e) => e.id === item.id)) {
+      alert("Item already added to wishlist");
+      return;
     }
-  }, [clickedWishlist, wishlist]);
+
+    dispatch(addToWishlist(item));
+    localStorage.setItem("wishlist", JSON.stringify([...wishlist.items, item]));
+  };
 
   const allProducts = [
     ...products.game,
@@ -55,31 +50,26 @@ function ExploreProducts() {
     ...products.food,
     ...products.utils,
   ];
-
-  const PRODUCTS_PER_PAGE = 8;
-
+  const flashSaleProducts = allProducts.filter((product) => product.discount);
   const [cards, setCards] = useState(
-    allProducts.map((card) => ({
+    flashSaleProducts.map((card) => ({
       ...card,
-      isHeartClicked: wishlist.items.some((e) => e.id === card.id),
+      isHeartClicked: false,
       isEyeClicked: false,
     }))
   );
 
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const handleHeartClick = (index, item) => {
-    // Prevent action if already clicked
-    if (cards[index].isHeartClicked) {
+  const handleHeartClick = (item, index) => {
+    if (wishlist.items.some((e) => e.id === item.id)) {
       return;
     }
 
     setCards(
       cards.map((card, i) =>
-        i === index ? { ...card, isHeartClicked: !card.isHeartClicked } : card
+        i === index ? { ...card, isHeartClicked: true } : card
       )
     );
-    handleWishlistToggle(item);
+    handleAddToWishlist(item);
   };
 
   const handleEyeClick = (index) => {
@@ -90,62 +80,38 @@ function ExploreProducts() {
     );
   };
 
-  const totalPages = Math.ceil(cards.length / PRODUCTS_PER_PAGE);
-
-  const handlePreviousPage = () => {
-    setCurrentPage((prevPage) => (prevPage > 0 ? prevPage - 1 : prevPage));
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) =>
-      prevPage < totalPages - 1 ? prevPage + 1 : prevPage
-    );
-  };
-
-  const displayedCards = cards.slice(
-    currentPage * PRODUCTS_PER_PAGE,
-    (currentPage + 1) * PRODUCTS_PER_PAGE
-  );
-
   return (
-    <div className="px-[10px] lg:px-[100px] flex flex-col gap-5">
+    <div className="px-[10px] lg:pl-[100px] flex flex-col gap-5 overflow-hidden">
       <div className="flex items-center gap-3">
         <img src={block} alt="block" />
         <p className="font-Poppins font-[600] text-[16px] leading-[20px] text-[#DB4444]">
-          Our Products
+          Today&apos;s
         </p>
       </div>
       <div className="flex justify-between items-center">
-        <h1 className="font-Inter font-[600] text-[20px] lg:text-[36px] leading-[48px]">
-          Explore Our Products
-        </h1>
-        <div className="flex items-center gap-3">
-          <img
-            src={arrowLeft}
-            alt="navigation"
-            className={`cursor-pointer ${
-              currentPage === 0 && "opacity-50 cursor-not-allowed"
-            }`}
-            onClick={handlePreviousPage}
-          />
+        <div className="flex flex-col items-center gap-3 lg:gap-7 lg:flex-row">
+          <h1 className="font-Inter self-start font-[600] text-[20px] lg:text-[36px] leading-[48px]">
+            Flash Sales
+          </h1>
+          <CountDown />
+        </div>
+        <div className="hidden items-center gap-3 lg:pr-[100px] lg:flex">
+          <img src={arrowLeft} alt="navigation" className={`cursor-pointer `} />
           <img
             src={arrowRight}
             alt="navigation"
-            className={`cursor-pointer ${
-              currentPage === totalPages - 1 && "opacity-50 cursor-not-allowed"
-            }`}
-            onClick={handleNextPage}
+            className={`cursor-pointer `}
           />
         </div>
       </div>
-      <div className="grid mx-auto gap-7 grid-cols-1 mt-7 md:grid-cols-2 lg:grid-cols-4">
-        {displayedCards.map((card, i) => (
+      <div className="grid mx-auto gap-7 grid-cols-1 mt-7 md:grid-cols-2 lg:flex">
+        {cards.map((card, i) => (
           <div key={i} className="flex flex-col justify-center gap-4">
             {/* image section */}
             <div className="bg-[#F5F5F5] flex items-center cursor-pointer p-8 w-[270px] h-[250px] relative">
-              {card.isNew ? (
-                <div className="bg-[#00FF66] self-start absolute left-4 -top-[-20px] px-[16px] py-[4px] rounded-[4px] font-Poppins font-[400] text-[12px] leading-[18px] text-[#FAFAFA]">
-                  <p>NEW</p>
+              {card.discount ? (
+                <div className="bg-[#DB4444] self-start absolute left-4 -top-[-20px] px-[16px] py-[4px] rounded-[4px] font-Poppins font-[400] text-[12px] leading-[18px] text-[#FAFAFA]">
+                  <p>-40%</p>
                 </div>
               ) : (
                 ""
@@ -158,12 +124,12 @@ function ExploreProducts() {
                       ? "bg-[#DB4444] text-white"
                       : "bg-white text-[#000000]"
                   }`}
-                  onClick={() => handleHeartClick(i, card)}>
-                  {card.isHeartClicked ? (
-                    <IoIosHeartEmpty className="w-[24px] h-[24px] text-white" />
-                  ) : (
-                    <IoIosHeartEmpty className="w-[24px] h-[24px] text-[#000000]" />
-                  )}
+                  onClick={() => handleHeartClick(card, i)}>
+                  <IoIosHeartEmpty
+                    className={`w-[24px] h-[24px] duration-200 ${
+                      card.isHeartClicked ? "text-white" : "text-[#000000]"
+                    }`}
+                  />
                 </div>
                 <div
                   className={`rounded-full p-2 cursor-pointer duration-200 ${
@@ -190,8 +156,13 @@ function ExploreProducts() {
               <h3 className="font-Poppins font-[500] text-[16px] leading-6">
                 {card.name}
               </h3>
-              <div className="flex justify-start items-center gap-3">
+              <div className="flex justify-start items-center font-[500] font-Poppins text-[16px] leading-6 gap-3">
                 <p className="text-[#DB4444]">${card.price}</p>
+                <p className="line-through text-[#000000] opacity-[50%]">
+                  ${card.prev_price}
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
                 <img src={card.star} alt="star" />
                 <p className="text-[#000000] opacity-[50%] text-[16px] leading-6">
                   {card.span}
@@ -204,8 +175,9 @@ function ExploreProducts() {
       <button className="bg-[#DB4444] mt-16 font-Poppins font-[500] text-[16px] leading-6 py-[16px] px-[48px] self-center rounded-[4px] text-white hover:bg-[#eb7e7e]">
         View All Products
       </button>
+      <div className="border-b border-slate-200 pt-10 hidden lg:block"></div>
     </div>
   );
 }
 
-export default ExploreProducts;
+export default FlashSale;

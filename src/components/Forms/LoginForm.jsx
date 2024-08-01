@@ -46,11 +46,16 @@ function SignUpForm() {
           placeholder="Password"
           className="font-[400] text-[16px] leading-[24px] text-[#000000] opacity-[40%] outline-none p-3 border-b border-slate-500"
         />
-        <button
-          type="submit"
-          className="font-Poppins font-[500] text-[16px] leading-[24px] text-[#FAFAFA] bg-[#DB4444] py-[16px] mt-5 hover:bg-[#973131] duration-200 rounded-[4px]">
-          Creat Account
-        </button>
+        <div className="flex flex-col items-center gap-4 lg:flex-row">
+          <button
+            type="submit"
+            className="font-Poppins font-[500] text-[16px]  w-full leading-[24px] text-[#FAFAFA] bg-[#DB4444] py-[16px] mt-5 hover:bg-[#973131] duration-200 rounded-[4px]">
+            Log In
+          </button>
+          <p className="font-Poppins font-[500] text-[16px] cursor-pointer leading-[24px] text-[#DB4444] hover: duration-200">
+            Forgot Password?
+          </p>
+        </div>
       </form>
     </div>
   );

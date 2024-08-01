@@ -47,7 +47,7 @@ function FormContact({ handleSubmit, handleChange, formData }) {
             className="bg-[#F5F5F5] font-Poppins font-[400] text-[16px] leading-[24px] p-3 outline-none text-[#000000] w-full h-[207px]"
           />
         </div>
-        <button className="self-center w-full lg:self-end lg:w-1/3 py-4 px-12 rounded-[4px] bg-[#DB4444] text-white">
+        <button className="self-center w-full lg:self-end lg:w-1/3 py-4 px-12 rounded-[4px] font-[500] bg-[#DB4444] text-white text-[16px] leading-6">
           Send Message
         </button>
       </form>

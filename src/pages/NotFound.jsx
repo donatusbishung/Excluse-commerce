@@ -1,4 +1,3 @@
-import TopHeader from "../components/TopHeader";
 import GeneralHeader from "../components/GeneralHeader";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -6,10 +5,9 @@ function NotFound() {
   return (
     <div className="flex flex-col gap-16">
       <div>
-        <TopHeader />
         <GeneralHeader />
       </div>
-      <div className="pl-[10px] lg:px-[100px]">
+      <div className="pl-[10px] pt-[80px] lg:pt-[120px] lg:px-[100px]">
         <nav>
           <ul className="flex gap-[10px] font-Poppins text-[14px] leading-[20px] font-[400]">
             <li>

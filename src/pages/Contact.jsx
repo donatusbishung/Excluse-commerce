@@ -1,6 +1,5 @@
 import Footer from "../components/Footer";
 import GeneralHeader from "../components/GeneralHeader";
-import TopHeader from "../components/TopHeader";
 import phone from "../assets/images/icons-phone.png";
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
@@ -35,10 +34,9 @@ function Contact() {
   return (
     <div className="flex flex-col gap-12">
       <div>
-        <TopHeader />
         <GeneralHeader />
       </div>
-      <div className="pl-[10px] lg:px-[100px]">
+      <div className="pl-[10px] pt-[80px] lg:pt-[120px] lg:px-[100px]">
         <nav>
           <ul className="flex gap-[10px] font-Poppins text-[14px] leading-[20px] font-[400]">
             <li>
